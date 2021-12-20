@@ -1,14 +1,14 @@
-template<typename T, typename Cmp>
+template<typename Cmp>
 
 class PriorityQueue {
 private:
-    T* arr;
+    int* arr;
     size_t num;
     size_t cnt;
-    Cmp    cmp;
+    Cmp cmp;
 public:
     PriorityQueue(void) :arr(nullptr), num(0), cnt(0) {}
-    explicit PriorityQueue(const T* _f, const T* _l) :arr(nullptr), num(0), cnt(0) {
+    explicit PriorityQueue(const int* _f, const int* _l) :arr(nullptr), num(0), cnt(0) {
         copy(_f, _l);
     }
 
@@ -22,13 +22,12 @@ public:
     PriorityQueue& operator = (const PriorityQueue&) = delete;
 public:
     //добавить
-    void push1(const T& val) {
+    void push1(const int& val) {
         _set_alloc(1);
 
         arr[cnt++] = val;
         size_t   i = cnt - 1;
         size_t   p = (i - 1) >> 1;
-
         while ((i > 0) && cmp(val, arr[p])) {
             std::swap(arr[i], arr[p]);
             i = p;
@@ -45,7 +44,7 @@ public:
     }
 
     //копировать массив
-    void copy(const T* _f, const T* _l) {
+    void copy(const int* _f, const int* _l) {
         if (_f >= _l)
             return;
 
@@ -53,7 +52,7 @@ public:
         _set_alloc(n);
 
         cnt = n;
-        for (T* p = arr; _f != _l; ++_f)
+        for (int* p = arr; _f != _l; ++_f)
             *p++ = *_f;
 
         for (size_t i = (cnt >> 1) + 1; i > 0; --i)
@@ -68,8 +67,8 @@ public:
         cnt = num = 0;
     }
 
-    T& top(void) const { return arr[0]; }
-    T& top(void) { return arr[0]; }
+    int& top(void) const { return arr[0]; }
+    int& top(void) { return arr[0]; }
 
     size_t size(void) const {
         return cnt;
@@ -93,19 +92,19 @@ public:
 private:
 
     void _set_alloc(size_t n) {
-        T* tmp;
+        int* tmp;
         size_t tnum;
         if (arr == NULL) {
             tnum = (n == 1) ? 16 : n;
-            arr = new T[tnum];
+            arr = new int[tnum];
             num = tnum;
         }
         else if ((cnt + n) > num) {
             tnum = cnt + n + (num >> 1);
-            tmp = new T[tnum];
+            tmp = new int[tnum];
 
-            T* i = tmp, * e = arr + cnt;
-            for (T* p = arr; p != e; ++p)
+            int* i = tmp, * e = arr + cnt;
+            for (int* p = arr; p != e; ++p)
                 *i++ = *p;
 
             delete[] arr;
@@ -138,14 +137,14 @@ private:
 };
 //от большего к меньшему
 template<typename T> struct hcmp {
-    bool operator () (const T& a, const T& b) const {
+    bool operator () (const int& a, const int& b) const {
         return (a > b);
     }
 };
 
 //от меньшему к большему
 template<typename T> struct lcmp {
-    bool operator () (const T& a, const T& b) const {
+    bool operator () (const int& a, const int& b) const {
         return (a < b);
     }
 };
